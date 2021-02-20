@@ -4,10 +4,12 @@ export class UF {
   }
 
   find(id) {
-    while(id !== this.ids[id]) {
-      id = this.ids[id]
+    let newId = id
+    while(newId !== this.ids[newId]) {
+      newId = this.ids[newId]
     }
-    return id
+    this.ids[id] = newId //path compression
+    return newId
   }
 
   union(id1, id2) {
