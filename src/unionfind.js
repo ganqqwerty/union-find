@@ -1,45 +1,20 @@
-/**
- * @typedef {id: number, payload: any} UFId
- */
-export class UnionFind {
-  constructor() {
-    this.ids = []
+export class UF {
+  constructor(ids) {
+    this.ids = ids
   }
 
-  addPoints(points) {
-    let lastId = this.ids.length
-    for (let point of points) {
-      this.ids.push({
-        id: lastId++,
-        payload: point,
-      })
-    }
-  }
-  getRoot(id) {
-    while(this.ids[id].id !== id) {
-      id = this.ids[id].id
+  find(id) {
+    while(id !== this.ids[id]) {
+      id = this.ids[id]
     }
     return id
   }
-  /**
-   * 0,1,2,3,4,5,6
-   * 0,1,2,3,4,5,6
-   * @param {number} left id
-   * @param {number} right id
-   * @returns {void}
-   */
-  union(left, right) {
-    if (left !== right) {
-      this.ids[this.getRoot(right)].id = this.getRoot(left)
-    }
+
+  union(id1, id2) {
+    this.ids[this.find(id1)] = this.find(id2)
   }
-  /**
-   *
-   * @param {number} left
-   * @param {number} right
-   * @returns {boolean}
-   */
-  isConnected(left, right) {
-    return this.getRoot(left) === this.getRoot(right)
+
+  isConnected(id1, id2) {
+    return this.find(id1) === this.find(id2)
   }
 }
