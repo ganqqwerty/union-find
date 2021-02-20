@@ -2,36 +2,21 @@
  * @typedef {id: number, payload: any} UFId
  */
 export class UnionFind {
-  
   constructor() {
-    /**
-     * @var UFId[]
-     */
     this.ids = []
   }
-  
-  /**
-   *
-   * @param {any[]} points
-   * @return {void}
-   */
-  addPoints(points) {
-    const firstId = this.ids.length
-    this.ids.push(...points.map((point, index) => {
-      return {
-        id: firstId + index,
-        payload: point
-      }
-    }))
-  }
-  isSelfRef(id){
-    return this.ids[id].id === id
-  }
 
+  addPoints(points) {
+    let lastId = this.ids.length
+    for (let point of points) {
+      this.ids.push({
+        id: lastId++,
+        payload: point,
+      })
+    }
+  }
   getRoot(id) {
-    console.log(id, this.ids[id].id)
-    debugger
-    while (!this.isSelfRef(id)) {
+    while(this.ids[id].id !== id) {
       id = this.ids[id].id
     }
     return id
@@ -44,13 +29,14 @@ export class UnionFind {
    * @returns {void}
    */
   union(left, right) {
-    const [min, max] = [Math.min(left, right), Math.max(left, right)]
-    this.ids[this.getRoot(min)].id = this.ids[this.getRoot(max)].id
+    if (left !== right) {
+      this.ids[this.getRoot(right)].id = this.getRoot(left)
+    }
   }
   /**
-   * 
-   * @param {number} left 
-   * @param {number} right 
+   *
+   * @param {number} left
+   * @param {number} right
    * @returns {boolean}
    */
   isConnected(left, right) {
